@@ -10,13 +10,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by homepc on 26-02-2018.
+ * We define our bound service class here
  */
 
 public class MyBoundService extends Service {
 
+
+    //creating an object IBinder , so that we can use it later to talk to IBinder from MainActivity
     private final IBinder binder= (IBinder) new MyBinder();
 
+
+    //defining action onBind
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -30,8 +34,9 @@ public class MyBoundService extends Service {
         }
 
     }
-    public String  getTime(){
 
+    //our method to pull current date
+    public String  getTime(){
         String timeStamp=new SimpleDateFormat("HH.mm.ss").format(new Date());
         return timeStamp;
     }

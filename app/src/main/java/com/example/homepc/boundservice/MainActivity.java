@@ -13,23 +13,35 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    // out view objects
     TextView output;
     Button showTime;
+
+    //creating an instance of our bound service
     MyBoundService service = new MyBoundService();
+
+    //we use this variable to track binding status
     boolean bound = false;
 
+
+    //overriding onStart and onStop actions
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent=new Intent(this,MyBoundService.class);
-        bindService(intent,serviceConnection,this.BIND_AUTO_CREATE);
-        bound=true;
+
+        //defining explicit intent
+        Intent intent = new Intent(this, MyBoundService.class);
+
+        //calling service binder
+        bindService(intent, serviceConnection, this.BIND_AUTO_CREATE);
+        bound = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        bound=false;
+        bound = false;
     }
 
     @Override
@@ -41,29 +53,30 @@ public class MainActivity extends AppCompatActivity {
         showTime = findViewById(R.id.timeBtn);
 
 
-
         showTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                MyBoundService myBoundService = new MyBoundService();
-                String result = myBoundService.getTime();
+                String result = service.getTime();
                 output.setText(result);
             }
         });
 
 
     }
-        private ServiceConnection serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                MyBoundService.MyBinder binder = (MyBoundService.MyBinder) iBinder;
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
 
-            }
-        };
+    //creating an object of ServiceConnection, it is used to communciate with IBinder
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            MyBoundService.MyBinder binder = (MyBoundService.MyBinder) iBinder;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
 
 }
